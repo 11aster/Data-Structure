@@ -1,0 +1,38 @@
+  #include <iostream>
+#include <bits/stdc++.h>
+using  namespace std;
+#define maxn 10000
+int result[maxn]={0};//存储各个斐波那契数的结果
+int spn[maxn]={0};//存储相应的子问题个数
+
+
+int Fib(int n)//递归求子问题个数
+{
+    spn[n]++;
+    if(n==0)
+        return 0;
+        else if(n==1)
+            return 1;
+        return Fib(n-1)+Fib(n-2);
+}
+//用递归函数求解子问题的个数
+
+int main()
+{
+    int n,i;
+    cin>>n;
+    result[0]=0;
+    result[1]=1;
+    for(i=2;i<=n;i++)
+    {
+        result[i]=result[i-1]+result[i-2];//求每个子数列的值
+    }
+    Fib(n);//求子问题个数
+    for(i=0;i<=n;i++)
+    {
+       printf("Fib(%d)=%d,spn=%d\n",i,result[i],spn[i]);
+    }
+
+    return 0;
+}
+
