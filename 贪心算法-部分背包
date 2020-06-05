@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+#include <iostream>
+
+using namespace std;
+#define N 1000
+
+//部分背包问题
+struct bag
+{
+    int weight;//物品的重量
+    int  value;//物品的价值
+    double c;//性价比
+}a[N+1];
+
+bool cmp(bag a,bag b)//按照性价比降序排列
+{
+    return a.c>=b.c;
+}
+
+double knapsack(int n,bag a[],double con)
+{
+    //n为背包中物品的数量，arr[]为背包中的物品按照降序排列，con 为背包中物品的价值
+    //初始化
+    double left=con;
+    double getv=0;
+    //记得初始化i
+    int i=0;
+    //当背包能完全装进物品
+    while(i<n&&a[i].weight<left)
+    {
+        left-=a[i].weight;
+        getv+=a[i].value;
+        i++;
+    }
+    //当不能完全装进的时候，装满剩余的空间
+    if(i<n)
+      getv+=1.0*a[i].value*left/a[i].weight;
+    return getv;
+}
+
+int main()
+{
+    int n,con;
+    cin>>n;
+    cin>>con;
+    for(int i=0;i<n;i++)
+    {
+        cin>>a[i].weight>>a[i].value;
+        a[i].c=1.0*a[i].value/a[i].weight;//计算性价比
+    }
+    //按照性价比排序
+    sort(a,a+n,cmp);
+    cout<<knapsack(n,a,con);
+    return 0;
+}
