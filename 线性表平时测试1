@@ -1,0 +1,106 @@
+
+
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+typedef int ElemType;  //数据元素类型
+class List; //前视定义,否则友元无法定义
+//结点类定义
+class LinkNode
+{  friend  class List;
+   private:
+     LinkNode *link;
+     ElemType data;
+   public:
+     LinkNode (LinkNode *ptr = NULL)    {link=ptr;}
+     LinkNode(const ElemType & item, LinkNode *ptr = NULL){  data=item;link=ptr;}
+     ~LinkNode(){};
+};
+//单链表类定义
+
+class List
+
+{  private:
+
+     LinkNode *first; //指向链表头结点的指针
+
+   public:
+
+     List (ElemType x) { first = new LinkNode (x);}   // 带头结点
+
+     ~List (){ MakeEmpty();}         //析构函数
+
+     void MakeEmpty ( );      //线性表置空
+
+     void insert(ElemType val);   //在有序线性表中插入元素val
+
+     void reverse();   //线性表的倒置
+
+     void output();    //线性表的输出
+
+};
+
+void List:: MakeEmpty ( )
+ { LinkNode *q;
+   while (  first->link != NULL )
+	{ q = first->link;  //指向别摘下结点
+     first->link = q->link;//从链中摘下结点
+     delete q;        //释放摘下的结点
+    }
+};
+void List ::output ( )
+{  LinkNode  *p=first->link;
+   while(p!=NULL)
+   { if(p==first->link) cout<<p->data;
+
+     else  cout<<" "<<p->data;
+     p=p->link;
+   }
+   cout<<endl;
+}
+void List::insert(ElemType val)
+{
+   LinkNode*p=first;
+   LinkNode*temp=first;
+   while((p=p->link)!=NULL&&p->data<val)
+   {
+       temp=p;
+   }
+   LinkNode *newnode=new LinkNode;
+   newnode->data=val;
+   newnode->link=temp->link;
+   temp->link=newnode;
+}
+void List::reverse()
+{
+ LinkNode *p,*q;
+ p=first->link;
+ first->link=NULL;
+ while(p!=NULL)
+ {
+     q=p;
+     p=p->link;
+     q->link=first->link;
+     first->link=q;
+ }
+}
+
+
+int  main()
+{   List list(0);
+    ElemType endTag=0;
+    ElemType val;
+    //下面通过不断读入元素，插入到有序单链表中，建立从小到大的有序单链表
+    cin>>val;
+    while(val!=endTag)
+     {  list.insert(val);     //在有序表中插入一个元素
+
+        cin>>val;
+
+      }
+    list.reverse ();   //线性表倒置
+    cout<<"The result is:"<<endl;
+    list.output ();
+    return 0;
+}
+
