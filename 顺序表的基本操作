@@ -1,0 +1,176 @@
+///顺序表结构体的定义
+struct Node
+{
+    int *data;
+    int maxSize;
+    int last;
+}Sqlist;
+///顺序表的基本操作
+///构造函数和复制构造函数
+List(int sz)
+{
+    if(sz>0)
+    {
+        maxSize=sz;
+        last=-1;
+        data=new int[maxSize];
+        if(data==NULL)
+        {
+             cout<<"存储分配错误"<<endl;
+             exit(1);
+        }
+    }
+}
+
+List(List& L)
+{
+    maxSize=L.last+1;
+    last=L.last;
+    int value;
+    data= new int[maxSize];
+     if(data==NULL)
+        {
+             cout<<"存储分配错误"<<endl;
+             exit(1);
+        }
+        for(int i=1;i<=last+1;i++)
+        {
+            L.getData(i,vaule);
+            data[i-1]=value;
+        }
+}
+///定位和搜索
+int Search(int x)//T &x
+{
+    for(int i=0;i<last+1;i++)
+    {
+        if(data[i]==x)
+            return i+1;
+            return -1;
+    }
+}
+int Locate(int i)
+{
+   if(i>=1&&i<last+1)
+        return i;
+   return 0;
+}
+///插入和删除
+//插入平均移动n/2次，删除平均移动(n-1)/2次
+void Insert(int i,int x)
+{
+    if(last==maxSize-1)//last为最后一个元素的下标
+    { cout<<"顺序表已满"<<endl;exit(1);}
+    if(i<0||i>last+1)
+    {
+        cout<<"参数越界"<<endl;
+    }
+    last++;
+    for(int j=last;j>i;j--)
+    data[j]=data[j-1];
+    data[i]=x;
+}
+bool Delete(int i,int x)//i是位置
+{
+    if(i>=0)
+    {
+        last--;
+        data[i-1]=x;
+        for(int j=i;j<=last;j++)
+            data[j]=data[j+1];
+        return 1;
+    }
+    return 0;
+}
+///输入和输出
+void input()
+{
+    while(1)
+    {
+        cin>>last;
+    }
+    for(int i=0;i<last+1;i++)
+        cin>>data[i];
+}
+void output()
+{
+    for(int i=0;i<=last;i++)
+        cout<<data[i];
+}
+///
+bool getData(int i,int x)
+{
+    if(i>0&&i<last+1)
+    {
+        x=data[i-1];
+        return true;
+    }
+    else
+        return false;
+}
+///顺序表的元素逆置
+void reverse()
+{
+    int i,j,temp;
+    for(i=0,j=last;i<j;i++,j--)
+    {
+        temp=data[i];
+        data[i]=data[j];
+        data[j]=temp;
+    }
+}
+///删除元素下标为i-j的数据元素
+void deleteRange(int i,int j)
+{
+    int delta=j-i+1;
+    for(int k=j+1;k<last+1;k++)
+    {
+        data[k-delta]=data[k];
+    }
+    last-=delta;
+}
+
+
+///顺序表的并集
+int un[30];
+int cnt=0;
+void Union(List &A,List &B)
+{
+   for(int i=0;i<A.last+1;i++)
+    A.un[A.cnt++]=A.data[i];//先把A里面的元素全部存进数组
+   for(int i=0;i<B.last+1;i++)
+    if(!A.Search(B.data[i]))//如果在A里找不到B的元素，把B加入数组
+    A.un[A.cnt++]=B.data[i];
+   for(int j=0;j<A.cnt;i++)
+    cout<<A.un[i];
+   cout<<endl;
+}
+///顺序表的交集
+void Intersection(List &A,List &B)
+{
+    int m=A.last+1;
+    for(int i=0;i<m;i++)
+        if(B.Search(A.data[i]))
+        B.un[B.cnt++]=A.data[i];
+    for(int i=0;i<cnt;i++)
+        cout<<B.cnt[i];
+    cout<<endl;
+}
+///排序
+void Sequence(List &A)
+{
+    for(int i=0;i<A.last;i++)
+        for(j=i+1;j<A.last+1;j++)
+        if(A.data[i]>A.data[j])
+        {
+         int x=A.data[i];
+         A.data[i]=A.data[j];
+         A.data[j]=x;
+        }
+       for(int i=0;i<last+1;i++)
+        cout<<A.data[i];
+       cout<<endl;
+        
+}
+
+
