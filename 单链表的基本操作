@@ -1,0 +1,289 @@
+ ///单链表中结构体的定义
+struct LinkNode
+{
+    LinkNode *link;
+    int data;
+    LinkNode(LinkNode *ptr=NULL)
+    {
+        link=ptr;
+    }
+    LinkNode(int item,LinkNode *ptr=NULL)
+    {
+        data=item;
+        link=ptr;
+    }
+};
+///双链表中结构体的定义
+struct DNode
+{
+    int data;
+    DNode *prior;
+    DNode *next;
+};
+///单链表的基本操作
+///头结点的作用：在空表或非空表第一个结点之前的插入可以不做特殊处理，与一般情况一样统一进行处理
+
+///将链表置空
+void makeEmpty()
+{
+  //当链表不空时，删去链表中所有结点
+  LinkNode *p;
+  while(first->link!=NULL)
+  {
+      p=first->link;
+      //保存被删结点，从链表下摘下该结点
+      first->link=p->link;
+      delete p;
+  }
+}
+///判断表空否
+void isEmpty()
+{
+ return first->link==NULL?true:false;   
+}
+///判断表满否
+void isFull()
+{
+  return false;
+}
+///返回头结点
+LinkNode *getHead()
+{
+    return first;
+}
+///复制构造函数
+LinkList(LinkList &L)
+{
+    int value;
+    LinkNode *srcptr=L.getHead();//被复制表的附加头结点地址
+    LinkNode *destptr=first=new LinkNode;
+    while(srcptr->link!=NULL)//逐个结点复制
+    {
+        value =srcptr->link->data;
+        destptr->link=new LinkNode(value);
+        destptr=destptr->link;
+        scrptr=srcptr->link;
+    }
+    destptr->link=NULL;
+}
+///前插法建立单链表
+void inputFront(int endTag)
+{
+   LinkNode *newnode;
+   int val;
+   makeEmpty();//注意置空
+   cin>>val;
+   while(val!=endTag)
+   {
+     newnode= new LinkNode;
+     if(newnode==NULL)
+     {
+         cout<<"存储分配错误"<<endl;
+         exit(1);
+     }
+     newnode->link=first->link;
+     first->link=newnode;
+     cin>>val;  
+   }
+}
+///后插法建立单链表
+void inputRear(int endTag)
+{
+   LinkNode *newnode;
+   LinkNode *r;
+   makeEmpty();//注意置空
+   int val;
+   r=first;
+   cin>>val;
+   while(val!=endTag)
+   {
+       newnode=new LinkNode;
+       r->link=newnode;
+       r=newnode;
+       cin>>val;
+   }
+    r->link=NULL;//表收尾，实际可省略
+}
+
+///返回链表的长度
+int Length()
+{
+    int cnt=0;
+    LinkNode *p=first->link;
+    while(p!=NULL)
+    {
+        p=p->link;
+        cnt++;
+    }
+    return cnt;
+}
+///搜索含数据X的元素
+LinkNode* Search(int x)
+{
+    LinkNode *p=first->link;
+    while(p!=NULL)
+    {
+        if(p->data==x)
+            break;
+        else
+        p=p->link;
+    }
+    return p;
+}
+///搜素第i个元素的地址
+LinkNode* Locate(int i)
+{
+   if(i<0)
+        return NULL;
+   LinkNode *p;
+   int k=0;
+  p=first;//在Locate这里，p=first而不是first->link
+  while(p!=NULL&&k<i)
+  {
+      p=p->link;
+      k++;
+  }
+  return p;
+}
+///用x修改第i个元素的值
+void setData(int i,int x)
+{
+    if(i<0)
+        return;
+    else
+    {
+      LinkNode *p=Locate(i);
+      if(p==NULL) return;
+      else
+      p->data=x;    
+    }  
+}
+///注：这里的插入和删除都需要Locate函数
+///插入
+bool Insert(int i,int x)//将新元素插入在第i个结点之后
+{
+ LinkNode *current=Locate(i);//第i个结点
+ if(current==NULL)
+ {
+    cout<<"插入不成功"<<endl;
+    return false;  
+ }
+ LinkNode *newnode=new LinkNode(x);
+ if(newnode==NULL)
+ {
+     cout<<"存储分配错误"<<endl;
+     exit(1); 
+ }
+  newnode->link=current->link;
+  current->link=newnode;
+  return true;
+}
+///删除
+bool Delete(int i,int x)//将链表中第i个元素删除，通过引用型参数x返回该元素的值
+{
+   LinkNode *current=Locate(i-1);//第i个结点的前一个结点
+   if(current==NULL||current->link==NULL)
+        return false;
+   LinkNode *p=current->link;
+   current->link=p->link;
+   x=p->data;///*取出被删结点的数据值
+   delete p;
+   return true;
+}
+///求下标，已知元素值x求下标
+int xiabiao(int x)
+{
+    LinkNode *p=first->link;
+    int cnt=0;
+    while(p!=NULL)
+    {
+        cnt++;
+        if(p->data==x)
+         return cnt;
+         else
+        p=p->link;
+    }
+    return 0;
+}
+///两个单链表的并集
+int un[30];
+int cnt=0;
+void Union(LinkList &A,LinkList &B)
+{
+    LinkNode *p=A.first->link;
+    //把A全部存进数组
+    while(p)
+    {
+        cout<<" "<<p-<data;
+        A.un[A.cnt++]=p->data;
+        p=p->link;
+    }
+    //把B与A不同的部分也存进数组
+    LinkNode *q=B.first->link;
+    while(q)
+    {
+        if(A.xiabiao(q->data)==0)
+        {
+             cout<<" "<<q-<data;
+            A.un[A.cnt++]=q->data;
+        }
+        q=q->link;
+    }
+    cout<<endl;
+}
+///两个单链表的交集
+void Intersection(LinkList &A,LinkList &B)
+{
+  LinkNode *p=A.first->link;
+  while(p!=NULL)
+  {
+      if(B.xiabiao(p->data))//若链表B中有A的元素
+        cout<<p->data;
+      p=p->link;
+  }
+  cout<<endl;
+}
+///排序
+LinkNode* Sort(LinkNode *first)
+{
+  LinkNode *p=first;
+  LinkNode *q=first;
+  for(;p->link!=NULL;p=p->link)
+  {
+      for(q=first;q->link!=NULL;q=q->link)
+      {
+          if(q->data>q->link->data)
+            int temp=q->data;
+            q->data=q->link->data;
+            q->link->data=temp;
+      }
+  }
+  return first;
+    
+}
+///输出
+void output()
+{
+ LinkNode *p=first->link;
+ while(p)
+ {
+     cout<<p->data<<" ";
+     p=p->link;
+ }
+ cout<<endl;
+}
+
+///注：链表的有序插入和就地逆置已经在平时测试中给出
+///冒泡排序：
+
+//for (i=0; i<len-1; i++) /* 外循环为排序趟数，len个数进行len-1趟 */
+  //      for (j=0; j<len-1-i; j++) { // 内循环为每趟比较的次数，第i趟比较len-i次 
+   //         if (arr[j] > arr[j+1]) { // 相邻元素比较，若逆序则交换（升序为左大于右，降序反之） 
+     //           temp = arr[j];
+       //         arr[j] = arr[j+1];
+         //       arr[j+1] = temp;
+           // }
+        //}
+
+ 
+
