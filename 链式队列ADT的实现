@@ -1,0 +1,121 @@
+///链式队列ADT的实现
+#include <iostream>
+#include <bits/stdc++.h>
+ using namespace std;
+
+ ///队列节点类的定义
+ struct  QueueNode
+ {
+ public:
+     int data;
+     QueueNode *link;
+     QueueNode(int d,QueueNode *next=NULL):data(d),link(next){}
+     ~QueueNode()
+     {
+
+     }
+ };
+ ///队列类的定义
+ class LinkedQueue
+ {
+ public:
+    QueueNode *Rear,*Front;
+    LinkedQueue():Rear(NULL),Front(NULL)
+    {
+
+    }
+    ~LinkedQueue()
+    {
+        makeEmpty();
+    }
+    bool EnQueue(int x);//入队
+    bool DeQueue();//出队
+    bool getFront();//取队列的首元素
+    void makeEmpty();//置空
+    int getSize();//求队列长度
+    bool isEmpty()//判空
+    {
+        return (Front==NULL)?true:false;
+    }
+ };
+ void LinkedQueue::makeEmpty()
+ {
+     //释放链表中所有结点
+     QueueNode *p;
+     while(Front)//非空
+     {
+         p=Front;
+         Front=Front->link;
+         delete p;
+     }
+ }
+
+ bool LinkedQueue::EnQueue(int x)
+ {
+     if(Front==NULL)
+     {
+         //创造第一个结点
+          Front = Rear = new QueueNode(x);
+           if(Front==NULL)
+            return false;
+     }
+     else//队列不空，插入
+     {
+        Rear->link=new QueueNode(x);
+        if(Rear->link==NULL)
+            return false;
+       Rear=Rear->link;
+     }
+    return true;
+
+ }
+ bool LinkedQueue::DeQueue()
+ {
+    if(isEmpty()==true)
+        return false;
+    QueueNode *p=Front;
+       int x = Front->data;
+    Front=Front->link;
+
+    cout<<"出队元素:"<<x<<endl;
+    delete p;
+    return true;
+ }
+
+ bool LinkedQueue::getFront()
+ {
+     if(isEmpty()==true)
+        return false;
+     int x=Front->data;
+     cout<<"队首元素为"<<x<<endl;
+     return true;
+ }
+ int LinkedQueue::getSize()
+ {
+     QueueNode *p=Front;
+    int k=0;
+    while(p)
+    {
+        k++;
+       p=p->link;
+
+    }
+    return k;
+ }
+
+int main()
+{
+    LinkedQueue lq;
+    for(int i=1;i<=10;i++){
+        lq.EnQueue(i);
+    }
+    lq.getFront();
+    int sz = lq.getSize();
+    cout<<"队列大小:"<<sz<<endl;
+    lq.DeQueue();
+    lq.getFront();
+    sz = lq.getSize();
+    cout<<"队列大小:"<<sz<<endl;
+    return 0;
+}
+
