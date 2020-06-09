@@ -1,0 +1,58 @@
+///栈的应用之平衡符号
+///此代码只验证圆括号，方括号，大括号的平衡与否
+///只做一个空栈
+///如果是左括号，入栈
+///如果是右括号：
+///1、如果此时栈空，那么报错
+///2、与栈头对比是否平衡，若平衡，弹出栈头，否则报错
+///在文件尾，若栈非空，那么报错
+
+#include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+
+
+using namespace std;
+
+///顺序栈
+char stack[100];//栈
+int top=-1;//栈头
+
+int judge(char ch)
+{
+    while(top!=-1)//非空
+    {
+        switch(ch)
+        {
+            case ')':return stack[top--]=='('?1:0;
+            case ']':return stack[top--]=='['?1:0;
+            case '}':return stack[top--]=='{'?1:0;
+            default: return 0;
+        }
+    }
+         return 0;
+}
+
+int main()
+{
+    char ch;
+    int flag=1;
+    while((ch=getchar())!='\n')
+    {
+        if(ch=='('||ch=='['||ch=='{')
+            stack[++top]=ch;//左符号入栈
+        else if(!judge(ch))//判断右符号平衡与否,平衡是1
+        {
+            flag=0;
+            break;
+        }
+    }
+    if(flag&&top==-1)//文件尾栈空
+    cout<<"The stack is legal"<<endl;
+    else
+    cout<<"The stack is illegal"<<endl;
+    return 0;
+}
+
+///1.序列：{[()]} 是合法的。
+///2.序列：{[()]}} 则是非法的。
