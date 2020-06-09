@@ -1,0 +1,98 @@
+#include <iostream>
+
+using namespace std;
+
+///链式栈ADT的实现
+ struct  StackNode  //栈结点的的定义
+ {
+ public:
+    int data;
+    StackNode *link;
+    StackNode(int item,StackNode *next=NULL)
+    {
+        data=item;
+        link=next;
+    }
+    ~StackNode(){};
+ };
+
+ class LinkedStack
+ {
+ private:
+    StackNode *top;
+ public:
+    LinkedStack():top(NULL){}//构造函数
+    ~LinkedStack(){makeEmpty();}//析构函数
+    bool pop();//出栈
+    void push(int x);//压栈
+    bool getTop();//取栈顶元素
+    bool makeEmpty();//置空
+    int getSize();
+    bool isEmpty()
+    {
+        //判空
+        return (top==NULL)?true:false;
+    }
+ };
+ bool LinkedStack::makeEmpty()
+ {
+     StackNode *p=top;
+     while(p)
+     {
+         top=top->link;
+         delete p;
+     }
+     return true;
+ }
+ bool LinkedStack::pop()
+ {
+    if(isEmpty()==true)
+        return false;
+    StackNode *p=top;
+    top=top->link;
+    int x=p->data;
+    cout<<"出栈元素为"<<x<<endl;
+    delete p;
+    return true;
+ }
+ bool LinkedStack::getTop()
+ {
+     if(isEmpty()==true)
+        return false;
+        StackNode *p=top;
+       int  x=p->data;
+        cout<<"栈顶元素为:"<<x<<endl;
+        return true;
+ }
+ void LinkedStack::push(int x)
+ {
+     top= new StackNode(x,top);
+ }
+ int LinkedStack::getSize()
+ {
+     StackNode *p=top;
+     int k=0;
+     while(p)
+     {
+       p=p->link;
+       k++;
+     }
+     return k;
+ }
+ ///测试代码
+ int main()
+ {
+
+     LinkedStack s;
+     for(int i=0;i<10;i++)
+        s.push(i);
+     int sz;
+     sz=s.getSize();
+     cout<<"栈大小为"<<sz<<endl;
+     s.pop();
+      sz=s.getSize();
+     cout<<"栈大小为"<<sz<<endl;
+     s.getTop();
+     return 0;
+
+ }
