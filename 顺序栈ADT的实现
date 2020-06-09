@@ -1,0 +1,91 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+///顺序栈ADT的实现
+ struct  SStack  //栈结点的的定义
+ {
+ public:
+    int *elements;
+    int top;
+    int maxSize;
+    void overflowProcess()
+    {
+        int *newArray=new int[2*maxSize];
+        for(int i=0;i<maxSize;i++)
+            newArray[i]=elements[i];
+        maxSize+=maxSize;
+        delete []elements;
+        elements=newArray;
+    }
+ };
+
+ class SSeqStack:public SStack
+ {
+ public:
+    SSeqStack(int sz=10)
+    {
+        maxSize=sz;
+        top=-1;
+        elements=new int[maxSize];
+    }
+    ~SSeqStack(){delete []elements;}
+    bool pop();//出栈
+    void push(int x);//压栈
+    bool getTop();//取栈顶元素
+    bool makeEmpty(){top=-1;};//置空
+    int getSize();
+    bool isEmpty()
+    {
+        //判空
+        return (top==NULL)?true:false;
+    }
+    bool isFull()
+    {
+        //判满
+        return (top==maxSize-1)?true:false;
+    }
+ };
+
+ int SSeqStack::getSize()
+ {
+    return top+1;
+ }
+ bool SSeqStack::getTop()
+ {
+     if(isEmpty()==true)
+        return false;
+     int x=elements[top];
+     cout<<"栈顶元素为"<<x<<endl;
+     return true;
+ }
+ void SSeqStack::push(int x)
+ {
+     if(isFull()==true)
+       overflowProcess();
+        elements[++top]=x;
+ }
+ bool SSeqStack::pop()
+ {
+     if(isEmpty()==true)
+        return false;
+     elements[top--];
+     return true;
+
+ }
+ ///测试代码
+ int main()
+ {
+     SSeqStack ls;
+     for(int i=0;i<10;i++)
+     ls.push(i);
+     int sz;
+     sz=ls.getSize();
+     cout<<"栈大小为"<<sz<<endl;
+     ls.pop();
+      sz=ls.getSize();
+     cout<<"栈大小为"<<sz<<endl;
+     ls.getTop();
+     return 0;
+
+ }
