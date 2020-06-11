@@ -1,0 +1,76 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+typedef struct BinNode
+{
+char data;
+BinNode *leftChild,*rightChild;
+}BNode,*BTree;
+
+BTree Create(int n,char*LVR,char*LRV)//中序和后序建立二叉树
+{
+  if(n==0)
+        return NULL;
+  BTree root=new BinNode();
+  root->data=LRV[n-1];
+  int k=0;
+  while(LRV[n-1]!=LVR[k])
+  {
+      k++;
+  }
+  root->leftChild=Create(k,LVR,LRV);
+  root->rightChild=Create(n-k-1,LVR+k+1,LRV+k);   //只能是这样
+  return root;
+}
+int Height(BTree subTree)
+{
+    if(subTree==NULL)
+        return 0;
+    else
+    {
+        int a=Height(subTree->leftChild);
+        int b=Height(subTree->rightChild);
+        return (a<b)?b+1:a+1;
+    }
+
+}
+void Print(BTree subTree,int l) //递归按层次打印
+{
+    if(subTree==NULL||l<0)
+    return ;
+    if(l==0)
+    {
+     cout<<subTree->data;
+     return;
+    }
+
+    Print(subTree->leftChild,l-1);
+    Print(subTree->rightChild,l-1);
+
+
+}
+
+int main()
+{
+    BTree Tree;
+    int n;
+    //int l=1;
+    char mid[100],last[100];
+    cin>>n;
+    cin>>mid;
+    cin>>last;
+    Tree=Create(n,mid,last);
+    int x=Height(Tree);
+    if(x==0)
+    cout<<"Binary tree is empty!"<<endl;
+    else
+    {
+        for(int i=1;i<=x;i++)
+        {
+            cout<<"Level "<<i<<":";
+            Print(Tree,i-1);
+            cout<<endl;
+        }
+    }
+    return 0;
+}
