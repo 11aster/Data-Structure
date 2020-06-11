@@ -1,0 +1,132 @@
+///链式二叉树ADT的简单实现
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+struct BinTreeNode
+{
+public:
+    BinTreeNode *leftchild,*rightchild;
+    char data;
+    BinTreeNode(){leftchild=NULL;rightchild=NULL;}
+    BinTreeNode(char x,BinTreeNode*left=NULL,BinTreeNode*right=NULL):data(x),leftchild(left),rightchild(right)
+    {}
+    ~BinTreeNode(){}
+};
+
+class BinaryTree{
+public:
+    BinTreeNode*root;
+    BinaryTree(){root=new BinTreeNode();}
+    void CreateBinTree(BinTreeNode *&subtree);//创建二叉树
+    void preOrder(BinTreeNode *subtree);//前序遍历
+    void inOrder(BinTreeNode *subtree);//中序遍历
+    void postOrder(BinTreeNode *subtree);//后序遍历
+    int Depth(BinTreeNode *subtree);//求指定元素的深度/高度
+    int Size(BinTreeNode *subtree);//求结点的个数
+   void Parent(BinTreeNode *subtree,char ch);//求指定元素的双亲
+};
+
+///在这里就直接用root
+void BinaryTree::CreateBinTree(BinTreeNode *&root)
+{
+ char item;
+ cin>>item;
+ if(item!='#')//递归终止的条件
+ {
+     root=new BinTreeNode(item);
+     if(root==NULL){cout<<"存储分配错误"<<endl;exit(1);}
+     CreateBinTree(root->leftchild);
+     CreateBinTree(root->rightchild);
+ }
+ else
+    root=NULL;
+}
+void BinaryTree::preOrder(BinTreeNode *subtree)
+{
+    if(subtree!=NULL)
+    {
+        cout<<subtree->data;
+        preOrder(subtree->leftchild);
+        preOrder(subtree->rightchild);
+    }
+    else
+        return;
+}
+void BinaryTree::inOrder(BinTreeNode *subtree)
+{
+    if(subtree!=NULL)
+    {
+        inOrder(subtree->leftchild);
+        cout<<subtree->data;
+        inOrder(subtree->rightchild);
+    }
+    else
+        return ;
+
+}
+void BinaryTree::postOrder(BinTreeNode *subtree)
+{
+    if(subtree!=NULL)
+    {
+        postOrder(subtree->leftchild);
+        postOrder(subtree->rightchild);
+        cout<<subtree->data;
+    }
+    else
+        return;
+}
+int BinaryTree::Depth(BinTreeNode *subtree)
+{
+    if(subtree==NULL)
+        return 0;
+    else
+    {
+        int a=Depth(subtree->leftchild);
+        int b=Depth(subtree->rightchild);
+        return (a>=b)?a+1:b+1;
+    }
+
+}
+int BinaryTree::Size(BinTreeNode *subtree)
+{
+ if(subtree==NULL)
+        return 0;
+ else
+    return 1+Size(subtree->leftchild)+Size(subtree->rightchild);
+}
+void BinaryTree::Parent(BinTreeNode *subtree,char ch)
+{
+   if(subtree==NULL)
+        return;
+    else  if(subtree->leftchild->data==ch||subtree->rightchild->data==ch)
+        cout<< subtree->data;
+    Parent(subtree->leftchild,ch);
+  Parent(subtree->rightchild,ch);
+}
+
+int main()
+{
+     BinaryTree tree;
+     tree.CreateBinTree(tree.root);
+      cout<<"前序遍历序列：";
+      tree.preOrder(tree.root);
+      cout<<endl;
+      cout<<"中序遍历序列：";
+       tree.inOrder(tree.root);
+      cout<<endl;
+      cout<<"后序遍历序列：";
+      tree.postOrder(tree.root);
+      cout<<endl;
+       cout<<"二叉树深度为:"<<tree.Depth(tree.root)<<endl;
+          cout<<"二叉树结点数为:"<<tree.Size(tree.root)<<endl;
+     char element;
+    cout<<"请输入需要查找的元素:";
+      cin>>element;
+    cout<<"双亲为:";
+     tree.Parent(tree.root,element);
+    cout<<endl;
+    return 0;
+}
+///测试序列：A B H # # F D # # # E # C K # # G # #
+///需要查找的元素为：E
