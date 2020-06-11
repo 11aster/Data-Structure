@@ -1,0 +1,79 @@
+#include <iostream>
+#include <stdlib.h>
+#include<stdio.h>
+using namespace std;
+//数据元素类型
+typedef char ElemType;
+//二叉树结点定义
+typedef struct TreeNode
+{	ElemType data;
+	struct TreeNode *lson, *rson;
+} TreeNode;
+//二叉树类
+class BinaryTree
+{ private:
+	TreeNode *root;
+  public:
+	BinaryTree() { root = NULL; };
+	~BinaryTree() { MakeEmpty(root); }
+	void MakeEmpty(TreeNode *t);
+	void create( ) { root = cp_create(root); };  //完全前序建立二叉树，空指针用@表示
+	TreeNode *cp_create(TreeNode *t);
+	void output( ) { Index_print(root,1); };
+	//*********** 下面是需要自己完成的函数 ******************
+	void Index_print(TreeNode *t,int l);  //缩进目录形式输出二叉树
+
+};
+
+//二叉树置空
+
+void BinaryTree::MakeEmpty(TreeNode *t)
+{	if (t != NULL)
+	{	MakeEmpty(t->lson);
+		MakeEmpty(t->rson);
+		delete t;
+	}
+}
+
+//完全前序序列创建二叉树，空指针用@表示
+
+TreeNode *BinaryTree::cp_create(TreeNode *t)
+{	ElemType v;
+	cin >> v;
+	if (v != '@')
+	{	t = new TreeNode;
+		t->data = v;
+		t->lson = cp_create(t->lson);
+		t->rson = cp_create(t->rson);
+	}
+	else t = NULL;
+	return t;
+}
+
+
+//*****下面是要补充的函数Index_print  *************
+void BinaryTree::Index_print(TreeNode *t,int l)
+{
+    if(t==NULL)
+        return;
+    else
+    {
+        for(int i=1;i<l;i++)
+        cout<<"       ";
+         printf("%2d",l);
+       cout<<t->data<<endl;
+}
+  Index_print(t->lson,l+1);
+    Index_print(t->rson,l+1);
+}
+//*************************************************
+
+//主函数
+
+int main()
+{	BinaryTree t;
+	t.create();      //创建二叉树
+	t.output();       //按规定格式输出二叉树
+	cout<< endl;
+	return 0;
+}
