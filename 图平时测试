@@ -1,0 +1,67 @@
+int getNum(Graphlnk g, VertexType vi) {
+//为方便操作额外加一个，得到vi的数组下标
+	for (int i = 0; i < g.VexNum; i++)
+		if (g.Nodetable[i].vertex == vi) return i;
+	return -1;
+}
+
+int Insert_Edge(Graphlnk &g, VertexType vi, VertexType vj) {
+	int v1 = getNum(g,vi);
+	int v2 = getNum(g,vj);
+	if(v1<0 || v2 < 0) return -1;
+	EdgeNode *p = g.Nodetable[v1].link;
+	while(p) {
+		if (p->adjvex == v2) return 0;
+		p = p->next;
+	}
+	p = new EdgeNode;
+	p->adjvex = v2;
+	p->next = g.Nodetable[v1].link;
+	g.Nodetable[v1].link = p;
+//	cout<<g.Nodetable[v1].link->adjvex;
+	if(v1 == v2) return 1;//如果输入的是两个一样的点 aa 环
+	p = new EdgeNode;
+	p->adjvex = v1;
+	p->next = g.Nodetable[v2].link;
+	g.Nodetable[v2].link = p;
+//	cout<<g.Nodetable[v2].link->adjvex;
+	return 1;
+}
+
+int  Delete_Edge(Graphlnk &g, VertexType vi, VertexType vj) {
+	int v1 = getNum(g,vi);
+	int v2 = getNum(g,vj);
+	if(v1<0 || v2 < 0) return -1;
+	EdgeNode *p = g.Nodetable[v1].link;
+	if(p && p->adjvex == v2) {
+		g.Nodetable[v1].link = p->next;
+		if(v1 == v2) return 1;
+	}
+	while(p) {
+		EdgeNode *pnext = p->next;
+		if(pnext && pnext->adjvex == v2 ) {
+			p->next = pnext->next;
+			delete pnext;
+			if(v1 == v2) return 1;
+			break;
+		}
+		p = p->next;
+
+	}
+	p = g.Nodetable[v2].link;
+	if(p && p->adjvex == v1) {
+		g.Nodetable[v2].link = p->next;
+		return 1;
+	}
+	while(p) {
+		EdgeNode *pnext = p->next;
+		if(pnext && pnext->adjvex == v1 ) {
+			p->next = pnext->next;
+			delete pnext;
+			return 1;
+		}
+		p = p->next;
+	}
+	return 0;
+}
+ 
