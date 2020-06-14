@@ -1,0 +1,54 @@
+///从某一顶点深度遍历图
+void DFS(Graph &G,T v,bool &visited[])
+{
+   //从顶点v开始优先深度遍历图G
+   visit(v);
+   int i=G.getVertexPos(v);
+   visited[i]=true;
+   T w=G.getFirstNeighbor(v);
+   int k=G.getVertexPos(w);
+   while(k!=-1)
+   {
+       if(!visited[k])
+        DFS(G, w, visited);  //若w未访问过, 递归访问顶点w 
+        w = G.getNextNeighbor (v, w); //下一个邻接顶点 
+        k=G.getVertexPos(w);  
+   }
+}
+///深度优先遍历图G(所有顶点都被作为起始点）
+void DFS_Graph(Graph& G)
+{
+    ///深度优先遍历图（图可能不连通或从一个顶点不能遍历）
+    int loc,n=G.NumVertices();//顶点个数
+    bool *visited=new bool[n];
+    for(int i=0;i<n;i++)
+        visited[i]=false;//辅助数组初始化
+        for(int i=0;i<n;i++)//从一个未访问过的结点开始深度优先遍历
+            if(!visited[i])
+            DFS(G,G.NodeTable[i].data,visited);
+        delete []visited;//释放visited
+}
+///从某一顶点广度遍历图G
+
+void BFS (Graph& G, const T& v) 
+{ //从顶点v开始广度优先遍历图G 
+    int i, w, n = G.NumVertices(); //图中顶点个数 
+    bool *visited = new bool[n]; 
+    for (i = 0; i < n; i++) visited[i] = false; 
+    int loc = G.getVertexPos (v); //取顶点号 
+    visite(v);  //访问顶点v 
+    visited[loc] = true; //做已访问标记 
+    Queue  Q; 
+    Q.EnQueue (v);        //顶点进队列, 实现分层访问
+    while (!Q.IsEmpty() ) { //循环, 访问所有结点 
+        Q.DeQueue (v); 
+        k = G.getFirstNeighbor (v); //第一个邻接顶点 
+        while (k != -1) { //若邻接顶点w存在 
+            if (!visited[k]) { //若未访问过 
+                visite(w); //访问 
+                visited[k] = true; 
+                Q.EnQueue (w); } //顶点w进队列 
+        k = G.getNextNeighbor (v, w); //找顶点loc的下一个邻接顶点 
+        }            
+    } //外层循环，判队列空否 delete [] visited;
+}
